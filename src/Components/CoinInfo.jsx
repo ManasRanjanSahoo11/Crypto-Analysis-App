@@ -4,12 +4,21 @@ import axios from 'axios'
 import { HistoricalChart } from '../Config/api'
 import { Box, CircularProgress, createTheme, ThemeProvider } from '@mui/material'
 import { Line } from 'react-chartjs-2'
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Register the components with Chart.js
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function CoinInfo({ coin }) {
 
-    console.log(coin.id);
-    
-    
     const [historicalData, setHistoricalData] = useState()
     const [days, setDays] = useState(1)
 
@@ -23,7 +32,7 @@ function CoinInfo({ coin }) {
 
     useEffect(()=>{
         fetchHistoricalData()
-    }, [currency, days])
+    }, [currency, days, coin])
 
 
     const darkTheme = createTheme({
@@ -38,12 +47,12 @@ function CoinInfo({ coin }) {
     return (
        <ThemeProvider theme={darkTheme}>
         <Box sx={{
-            width:"70%",
+            width:"80%",
+            maxWidth: '1000px',
             display:"flex",
             flexDirection:"column",
             alignItems:"center",
-            marginTop:3,
-            padding:35
+            padding:1
         }}>
             {
                 !historicalData ? (
@@ -78,7 +87,8 @@ function CoinInfo({ coin }) {
                                 point:{
                                     radius:1
                                 }
-                            }
+                            },
+                            responsive: true
                          }}
                         />
                     </>
